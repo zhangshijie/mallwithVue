@@ -36,7 +36,7 @@
                       <div class="name">{{ item.prodcutName }}</div>
                       <div class="price">{{ item.salePrice }}</div>
                       <div class="btn-area">
-                        <a href="javascript:;" class="btn btn--m">加入购物车</a>
+                        <a href="javascript:;" class="btn btn-cart" @click= "addCart(item.productId)">加入购物车</a>
                       </div>
                     </div>
                   </li>
@@ -115,7 +115,6 @@
             },
             params:param
           }).then((result) => {
-            
             let res = result.data;
             if(res.status == '0'){
               if (flag) {
@@ -160,6 +159,22 @@
           this.page++;
           this.getGoodslist(true);
         }, 500);
+      },
+      addCart(productId){
+       axios({
+            method:'get',
+            url:'http://localhost:3000/goods/addCart',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            params:{productId:productId}
+          }).then((result) => { 
+            if (result.status == 0){
+              alert("加入成功");
+            }else{
+              alert(result.msg);
+            }
+          });
       }
     }
   }
