@@ -42,7 +42,7 @@
                   </li>
                 </ul>
                 <div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
-                  加载中...
+                  <img src = "@/static/loading-svg/loading-spinning-bubbles" v-show="loading">
                 </div>
               </div>
             </div>
@@ -70,6 +70,7 @@
         page: 1,
         pageSize:8,
         busy:false,
+        loading:false,
         priceFilter: [
           {
             startPrice: '0.00',
@@ -105,6 +106,7 @@
           sort:this.sortFlag?1:-1,
           priceLevel:this.priceChecked
         } 
+        this.loading = true;
           axios({
             method:'get',
             url:'http://localhost:3000/goods',
@@ -113,6 +115,7 @@
             },
             params:param
           }).then((result) => {
+            
             let res = result.data;
             if(res.status == '0'){
               if (flag) {
@@ -129,6 +132,7 @@
             }else{
               this.goodsList = [];
             }
+            this.loading = false;
           })
       },
       showFilterPopShow(){
