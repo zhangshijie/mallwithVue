@@ -98,12 +98,13 @@
       this.getGoodslist(false);
     },
     methods: {
-      getGoodslist(flag){
+      getGoodslist(flag = false){
         let param = {
           page:this.page,
           pageSize:this.pageSize,
-          sort:this.sortFlag?1:-1
-        }
+          sort:this.sortFlag?1:-1,
+          priceLevel:this.priceChecked
+        } 
           axios({
             method:'get',
             url:'http://localhost:3000/goods',
@@ -140,6 +141,8 @@
       },
       setPriceFilter(index){
         this.priceChecked = index;
+        this.page = 1;
+        this.getGoodslist(false);
         this.closePop();
       },
       sortGoods(){
