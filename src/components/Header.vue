@@ -18,7 +18,7 @@
           <span class="navbar-link"></span>
           <span v-text="nickName" v-if="nickName"></span>
           <a href="javascript:void(0)" class="navbar-link" @click="loginModalFlag=true" v-if="!nickName">Login</a>
-          <a href="javascript:void(0)" class="navbar-link" v-if="nickName">Logout</a>
+          <a href="javascript:void(0)" class="navbar-link" @click="logout" @v-if="nickName">Logout</a>
           <div class="navbar-cart-container">
             <span class="navbar-cart-count"></span>
             <a class="navbar-link navbar-cart-link" href="/#/cart">
@@ -171,6 +171,26 @@ export default {
         }else{
           alert(result.msg);
           this.errorTip = true;
+        }
+      }); 
+    },
+    logout(){
+    
+     var params = new URLSearchParams();
+      params.append('userName', this.userName);
+      params.append('userPwd', this.userPwd);
+      var header = {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      } 
+      var config = {
+        headers: header
+      } 
+       axios.post('http://localhost:3000/users/logout', params,config).then((result) => { 
+        if (result.data.status == 0){
+          alert("退出成功");
+          this.nickName ='';
+        }else{
+          alert(result.msg);
         }
       }); 
     }
