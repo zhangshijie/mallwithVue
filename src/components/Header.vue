@@ -18,7 +18,7 @@
           <span class="navbar-link"></span>
           <span v-text="nickName" v-if="nickName"></span>
           <a href="javascript:void(0)" class="navbar-link" @click="loginModalFlag=true" v-if="!nickName">Login</a>
-          <a href="javascript:void(0)" class="navbar-link" @click="logout" @v-if="nickName">Logout</a>
+          <a href="javascript:void(0)" class="navbar-link" @click="logout" v-if="nickName">Logout</a>
           <div class="navbar-cart-container">
             <span class="navbar-cart-count"></span>
             <a class="navbar-link navbar-cart-link" href="/#/cart">
@@ -152,6 +152,8 @@ export default {
     }
   },
   mounted(){
+    axios.defaults.baseURL =  'http://localhost:3000';
+    axios.defaults.withCredentials = true;
     this.headerConfig =  {headers: {'Content-Type': 'application/x-www-form-urlencoded'}};
     this.checkLogin();
   },
@@ -161,7 +163,7 @@ export default {
          let res = result.data;
          console.log(res);
          if(res.status == '0'){
-           this.nickName = res.result.userName
+           this.nickName = res.result
          }
        });
     },
