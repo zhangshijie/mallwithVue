@@ -147,22 +147,31 @@ export default {
       userPwd:'',
       errorTip:false,
       loginModalFlag:false,
-      nickName:''
+      nickName:'',
+      headerConfig : ''
     }
   },
+  mounted(){
+    this.headerConfig =  {headers: {'Content-Type': 'application/x-www-form-urlencoded'}};
+    this.checkLogin();
+  },
   methods: {
+    checkLogin(){
+       axios.get('/users/checkLogin',this.headerConfig).then((result)=> {
+         let res = result.data;
+         console.log(res);
+         if(res.status == '0'){
+           this.nickName = res.result.userName
+         }
+       });
+    },
     login(){
       if(!this.userName || !this.userPwd) return;
       var params = new URLSearchParams();
       params.append('userName', this.userName);
       params.append('userPwd', this.userPwd);
-      var header = {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      } 
-      var config = {
-        headers: header
-      }
-     axios.post('http://localhost:3000/users/login', params,config).then((result) => { 
+   
+     axios.post('/users/login', params,this.headerConfig).then((result) => { 
         this.loginModalFlag = false;
         if (result.data.status == 0){
           alert("登录成功");
@@ -175,17 +184,7 @@ export default {
       }); 
     },
     logout(){
-    
-     var params = new URLSearchParams();
-      params.append('userName', this.userName);
-      params.append('userPwd', this.userPwd);
-      var header = {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      } 
-      var config = {
-        headers: header
-      } 
-       axios.post('http://localhost:3000/users/logout', params,config).then((result) => { 
+       axios.post('/users/logout', this.headerConfig).then((result) => { 
         if (result.data.status == 0){
           alert("退出成功");
           this.nickName ='';

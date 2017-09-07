@@ -96,6 +96,8 @@
       NavBread
     },
     mounted() {
+      axios.defaults.baseURL =  'http://localhost:3000';
+      axios.defaults.withCredentials = true;
       this.getGoodslist(false);
     },
     methods: {
@@ -109,7 +111,7 @@
         this.loading = true;
           axios({
             method:'get',
-            url:'http://localhost:3000/goods',
+            url:'/goods/list',
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded'
             },
@@ -163,7 +165,7 @@
       addCart(productId){
        axios({
             method:'get',
-            url:'http://localhost:3000/goods/addCart',
+            url:'/goods/addCart',
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded'
             },
@@ -172,6 +174,7 @@
             if (result.status == 0){
               alert("加入成功");
             }else{
+              
               alert(result.msg);
             }
           });
