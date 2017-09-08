@@ -62,7 +62,7 @@
               <li v-for="item in cartList">
                 <div class="cart-tab-1">
                   <div class="cart-item-check">
-                    <a href="javascipt:;" class="checkbox-btn item-check-btn" v-bind:class="{'check':item.checked=='1'}" @click="editCart('checked',item)">
+                    <a href="javascipt:;" class="checkbox-btn item-check-btn" v-bind:class="{'check':item.checked=='1'}" @click="checkItem(item)">
                       <svg class="icon icon-ok">
                         <use xlink:href="#icon-ok"></use>
                       </svg>
@@ -226,10 +226,15 @@ export default {
         this.edit(item);
       }
     },
+    checkItem(item){
+      item.checked =  item.checked == '1' ? "0":"1";
+      this.edit(item);
+    },
     edit(item){
        var params = new URLSearchParams();
        params.append('productId', item.productId);
        params.append('productNum', item.productNum);
+       params.append('checked', item.checked);
        console.log("修改购物车商品数")
        console.log(item)
        axios.post("/users/cart/edit", params ,this.headerConfig).then((response)=>{
