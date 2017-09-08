@@ -9,7 +9,11 @@
           <div class="filter-nav">
             <span class="sortby">Sort by:</span>
             <a href="javascript:void(0)" class="default cur">Default</a>
-            <a href="javascript:void(0)" @click="sortGoods"  class="price">Price <svg class="icon icon-arrow-short"><use xlink:href="#icon-arrow-short"></use></svg></a>
+            <a href="javascript:void(0)" @click="sortGoods"  class="price">Price 
+              <svg class="icon icon-arrow-short" v-bind:class="{'sort-up':sortFlag}">
+                <use xlink:href="./../static/svg.svg#icon-arrow-short"></use>
+              </svg>
+            </a>
             <a href="javascript:void(0)" class="filterby stopPop" @click="showFilterPopShow">Filter by</a>
           </div>
           <div class="accessory-result">
@@ -50,6 +54,24 @@
         </div>
       </div>
       <div class="md-overlay" v-show="overLayFlag" @click="closePop"></div>
+      <Modal v-bind:mdShow="mdShow" v-on:close="closeModal">
+        <p slot="message">
+          请先登录，否则不能加入购物车
+        </p>
+        <div slot="btnGroup">
+          <a class="btn btn--m" href="javascript:void(0)" @click="closeModal">关闭</a>
+        </div>
+      </Modal>
+        <Modal v-bind:mdShow="mdShowCart" v-on:close="closeModal">
+        <p slot="message">
+          请先登录，否则不能加入购物车
+        </p>
+        <div slot="btnGroup">
+          <a class="btn btn--m" href="javascript:void(0)" @click="mdShowCart = false">继续购物</a>
+          <router-link class="btn btn--m" href="javascript:void(0)" to="/cart">查看购物车</router-link>
+        </div>
+      </Modal>
+      
       <nav-footer></nav-footer>
   </div>
 </template>
@@ -60,6 +82,7 @@
   import NavHeader from '@/components/Header.vue'
   import NavFooter from '@/components/NavFooter.vue'
   import NavBread from '@/components/NavBread.vue'
+  import Modal from '@/components/Modal.vue'
   import axios from 'axios'
 
   export default {
@@ -71,6 +94,8 @@
         pageSize:8,
         busy:false,
         loading:false,
+        mdShow:false,
+        mdShowCart:false,
         priceFilter: [
           {
             startPrice: '0.00',
@@ -93,7 +118,8 @@
     components: {
       NavHeader,
       NavFooter,
-      NavBread
+      NavBread,
+      Modal
     },
     mounted() {
       axios.defaults.baseURL =  'http://localhost:3000';
@@ -172,12 +198,16 @@
             params:{productId:productId}
           }).then((result) => { 
             if (result.status == 0){
-              alert("加入成功");
+              // alert("加入成功");
+              this.mdShowCart = true;
             }else{
-              
-              alert(result.msg);
+              this.mdShowCart = true;
+              // alert(result.msg);
             }
           });
+      },
+      closeModal(){
+        this.mdShow = false;
       }
     }
   }
