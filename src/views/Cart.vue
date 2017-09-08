@@ -82,9 +82,9 @@
                   <div class="item-quantity">
                     <div class="select-self select-self-open">
                       <div class="select-self-area">
-                        <a class="input-sub">-</a>
+                        <a class="input-sub" @click="reduceItem(item)">-</a>
                         <span class="select-ipt">{{item.productNum}}</span>
-                        <a class="input-add">+</a>
+                        <a class="input-add" @click="addItem(item)">+</a>
                       </div>
                     </div>
                   </div>
@@ -213,6 +213,28 @@ export default {
           if(res.status == 0){
             this.closeModal();
             this.init();
+          }
+      });
+    },
+    addItem(item){
+      item.productNum++;
+      this.edit(item);
+    },
+    reduceItem(item){
+      if(item.productNum > 1) {
+        item.productNum--;
+        this.edit(item);
+      }
+    },
+    edit(item){
+       var params = new URLSearchParams();
+       params.append('productId', item.productId);
+       params.append('productNum', item.productNum);
+       console.log("修改购物车商品数")
+       console.log(item)
+       axios.post("/users/cart/edit", params ,this.headerConfig).then((response)=>{
+          let res = response.data;
+          if(res.status == 0){
           }
       });
     }
