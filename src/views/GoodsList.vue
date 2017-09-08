@@ -64,7 +64,7 @@
       </Modal>
         <Modal v-bind:mdShow="mdShowCart" v-on:close="closeModal">
         <p slot="message">
-          请先登录，否则不能加入购物车
+          加入购物车成功
         </p>
         <div slot="btnGroup">
           <a class="btn btn--m" href="javascript:void(0)" @click="mdShowCart = false">继续购物</a>
