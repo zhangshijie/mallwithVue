@@ -109,8 +109,8 @@
           <div class="cart-foot-inner">
             <div class="cart-foot-l">
               <div class="item-all-check">
-                <a href="javascipt:;">
-                      <span class="checkbox-btn item-check-btn">
+                <a href="javascipt:;" @click="toggleCheckAll()">
+                      <span class="checkbox-btn item-check-btn" :class="{'check':checkAllFlag}">
                           <svg class="icon icon-ok"><use xlink:href="#icon-ok"/></svg>
                       </span>
                   <span>Select all</span>
@@ -179,7 +179,7 @@ export default {
       cartList:[],
       headerConfig : '',
       modalConfirm:false,
-      productId :''
+      productId :'',
     }
   },
   mounted(){
@@ -188,6 +188,18 @@ export default {
   },
   components:{
     NavHeader,NavFooter,NavBread,Modal
+  },
+  computed:{
+     checkAllFlag(){
+       return this.checkedCount == this.cartList.length;
+     },
+     checkedCount(){
+       var i = 0;
+       this.cartList.forEach((item)=>{
+         if(item.checked == '1') i++;
+       });
+       return i;
+     }
   },
   methods:{
     init(){
@@ -235,12 +247,24 @@ export default {
        params.append('productId', item.productId);
        params.append('productNum', item.productNum);
        params.append('checked', item.checked);
-       console.log("修改购物车商品数")
-       console.log(item)
        axios.post("/users/cart/edit", params ,this.headerConfig).then((response)=>{
           let res = response.data;
           if(res.status == 0){
           }
+      });
+    },
+    toggleCheckAll(){
+      var flag = !this.checkAllFlag;
+      this.cartList.forEach((item)=> {
+          item.checked = flag?'1':'0';
+      });
+      var params = new URLSearchParams();
+      params.append('checkAll', flag);
+      axios.post("/users/editCheckAll/", params ,this.headerConfig).then((response)=>{
+         let res = response.data;
+         if(res.status == 0){
+           console.log("update suc")
+         }
       });
     }
   }
