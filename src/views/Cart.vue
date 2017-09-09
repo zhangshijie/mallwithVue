@@ -172,7 +172,7 @@
   import NavBread from '@/components/NavBread.vue'
   import Modal from '@/components/Modal.vue'
   import axios from 'axios'
-  import {currency} from '@/utils/currency'
+  
 
 export default {
   data(){
@@ -182,9 +182,6 @@ export default {
       modalConfirm:false,
       productId :'',
     }
-  },
-  filters:{
-    currency: currency
   },
   mounted(){
     this.headerConfig =  {headers: {'Content-Type': 'application/x-www-form-urlencoded'}};
