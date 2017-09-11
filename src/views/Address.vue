@@ -60,11 +60,11 @@
           <div class="addr-list-wrap">
             <div class="addr-list">
               <ul>
-                <li>
+                <li v-for="item in  addressFilter ">
                   <dl>
-                    <dt>XXX</dt>
-                    <dd class="address">朝阳公园</dd>
-                    <dd class="tel">10000000000</dd>
+                    <dt> {{ item.userName }} </dt>
+                    <dd class="address">{{ item.streetName }} </dd>
+                    <dd class="tel">{{ item.tel }} </dd>
                   </dl>
                   <div class="addr-opration addr-del">
                     <a href="javascript:;" class="addr-del-btn">
@@ -88,7 +88,7 @@
             </div>
 
             <div class="shipping-addr-more">
-              <a class="addr-more-btn up-down-btn" href="javascript:;">
+              <a class="addr-more-btn up-down-btn" href="javascript:;" @click="expand">
                 more
                 <i class="i-up-down">
                   <i class="i-up-down-l"></i>
@@ -144,7 +144,9 @@ export default {
   data(){
     return {
        headerConfig : '',
-        addressList:[]
+       addressList:[],
+       filterCount:0,
+       limit: 3
     }
   },
   components:{
@@ -156,11 +158,28 @@ export default {
   },
   methods:{
     init(){
-        axios.get("/users/addressList", this.headerConfig).then((response)=>{
+      this.filterCount = this.limit;
+      axios.get("/users/addressList", this.headerConfig).then((response)=>{
         let res = response.data;
         this.addressList = res.result;
-
       });
+    },
+    expand(){
+      if(this.filterCount < this.addressList.length){
+         this.filterCount = this.addressList.length;
+      }else{
+        this.filterCount = 3;
+      }
+    }
+  },
+  computed:{
+    addressFilter(){
+      // if (this.addressList.count > this.filterCount){
+      //   return this.addressList.slice(0,this.filterCount);
+      // }else{
+      //   return this.addressList;
+      // }
+       return this.addressList.slice(0,this.filterCount);
     }
   }
 }
