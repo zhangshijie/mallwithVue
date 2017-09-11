@@ -88,8 +88,8 @@
             </div>
 
             <div class="shipping-addr-more">
-              <a class="addr-more-btn up-down-btn" href="javascript:;" @click="expand">
-                more
+              <a class="addr-more-btn up-down-btn" href="javascript:;" @click="expand" v-bind:class="{'open': this.filterCount == this.addressList.length }">
+                {{ expendText }}
                 <i class="i-up-down">
                   <i class="i-up-down-l"></i>
                   <i class="i-up-down-r"></i>
@@ -146,7 +146,8 @@ export default {
        headerConfig : '',
        addressList:[],
        filterCount:0,
-       limit: 3
+       limit: 3,
+       expendText:'more'
     }
   },
   components:{
@@ -167,8 +168,10 @@ export default {
     expand(){
       if(this.filterCount < this.addressList.length){
          this.filterCount = this.addressList.length;
+         this.expendText = 'less';
       }else{
         this.filterCount = 3;
+         this.expendText = 'more';
       }
     }
   },
