@@ -1,6 +1,9 @@
 <template>
  <div>
-
+    <nav-header></nav-header>
+    <nav-bread>
+      <span slot="bread">Address</span>
+    </nav-bread>
     <div class="checkout-page">
       <svg style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
         <defs>
@@ -121,7 +124,7 @@
         </div>
       </div>
     </div>
-
+  <nav-footer></nav-footer>
   </div> 
 </template>
 
@@ -130,16 +133,35 @@
 </style>
 
 <script>
+  import NavHeader from '@/components/Header.vue'
+  import NavFooter from '@/components/NavFooter.vue'
+  import NavBread from '@/components/NavBread.vue'
+  import Modal from '@/components/Modal.vue'
+  import axios from 'axios'
+
 export default {
   
   data(){
-
+    return {
+       headerConfig : '',
+        addressList:[]
+    }
   },
-  mounted:{
-
+  components:{
+    NavHeader,NavFooter,NavBread,Modal
+  },
+  mounted(){
+     this.headerConfig =  {headers: {'Content-Type': 'application/x-www-form-urlencoded'}};
+     this.init();
   },
   methods:{
+    init(){
+        axios.get("/users/addressList", this.headerConfig).then((response)=>{
+        let res = response.data;
+        this.addressList = res.result;
 
+      });
+    }
   }
 }
 </script>
