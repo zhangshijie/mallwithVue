@@ -60,7 +60,7 @@
           <div class="addr-list-wrap">
             <div class="addr-list">
               <ul>
-                <li v-for="item in  addressFilter ">
+                <li v-for=" (item,index) in  addressFilter " v-bind:class="{'check': selectedIndex == index}" @click="selectedIndex = index">
                   <dl>
                     <dt> {{ item.userName }} </dt>
                     <dd class="address">{{ item.streetName }} </dd>
@@ -71,10 +71,10 @@
                       <svg class="icon icon-del"><use xlink:href="#icon-del"></use></svg>
                     </a>
                   </div>
-                  <div class="addr-opration addr-set-default">
+                  <div class="addr-opration addr-set-default" v-if="selectedIndex == index">
                     <a href="javascript:;" class="addr-set-default-btn"><i>Set default</i></a>
                   </div>
-                  <div class="addr-opration addr-default">Default address</div>
+                  <div class="addr-opration addr-default" v-if="selectedIndex != index">Default address</div>
                 </li>
                 <li class="addr-new">
                   <div class="add-new-inner">
@@ -147,7 +147,8 @@ export default {
        addressList:[],
        filterCount:0,
        limit: 3,
-       expendText:'more'
+       expendText:'more',
+       selectedIndex:0
     }
   },
   components:{
