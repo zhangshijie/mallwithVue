@@ -72,7 +72,7 @@
                     </a>
                   </div>
                   <div class="addr-opration addr-set-default" v-if="!item.isDefault">
-                    <a href="javascript:;" class="addr-set-default-btn"><i>Set default</i></a>
+                    <a href="javascript:;" class="addr-set-default-btn" @click="setDetaultAddress(item.addressId)"><i>Set default</i></a>
                   </div>
                   <div class="addr-opration addr-default" v-if="item.isDefault">Default address</div>
                 </li>
@@ -164,6 +164,18 @@ export default {
       axios.get("/users/addressList", this.headerConfig).then((response)=>{
         let res = response.data;
         this.addressList = res.result;
+            console.log(this.addressList)
+        for (let a of res.result ){
+            console.log('selected')
+            console.log(a)
+          if (a.isDefault){
+            this.selectedIndex =  this.addressList.indexOf(a);
+            console.log('selected')
+            console.log(this.selectedIndex)
+            console.log(this.addressList.indexOf(a))
+            console.log(this.addressList)
+          }
+        }
       });
     },
     expand(){
@@ -174,15 +186,17 @@ export default {
         this.filterCount = 3;
          this.expendText = 'more';
       }
+    },
+    setDetaultAddress(addressId){
+       var params = new URLSearchParams();
+       params.append('addressId', addressId);
+       axios.post("/users/setDefaultAddress", params,this.headerConfig).then((response)=>{
+          this.init();
+       });
     }
   },
   computed:{
     addressFilter(){
-      // if (this.addressList.count > this.filterCount){
-      //   return this.addressList.slice(0,this.filterCount);
-      // }else{
-      //   return this.addressList;
-      // }
        return this.addressList.slice(0,this.filterCount);
     }
   }
