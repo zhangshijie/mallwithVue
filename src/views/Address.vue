@@ -71,10 +71,10 @@
                       <svg class="icon icon-del"><use xlink:href="#icon-del"></use></svg>
                     </a>
                   </div>
-                  <div class="addr-opration addr-set-default" v-if="selectedIndex == index">
+                  <div class="addr-opration addr-set-default" v-if="!item.isDefault">
                     <a href="javascript:;" class="addr-set-default-btn"><i>Set default</i></a>
                   </div>
-                  <div class="addr-opration addr-default" v-if="selectedIndex != index">Default address</div>
+                  <div class="addr-opration addr-default" v-if="item.isDefault">Default address</div>
                 </li>
                 <li class="addr-new">
                   <div class="add-new-inner">
