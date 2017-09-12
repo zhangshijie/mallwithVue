@@ -66,7 +66,7 @@
                     <dd class="address">{{ item.streetName }} </dd>
                     <dd class="tel">{{ item.tel }} </dd>
                   </dl>
-                  <div class="addr-opration addr-del">
+                  <div class="addr-opration addr-del" @click="alertDel(item.addressId)">
                     <a href="javascript:;" class="addr-del-btn">
                       <svg class="icon icon-del"><use xlink:href="#icon-del"></use></svg>
                     </a>
@@ -124,6 +124,13 @@
         </div>
       </div>
     </div>
+    <modal :mdShow="isMdShow" @close="closeModal">
+      <p slot="message">你是否确认要删除?</p>
+      <div slot="btnGroup">
+        <a class="btn btn--m" href="javascript:;" @click="delAddress()">确认</a>
+        <a class="btn btn--m" href="javascript:;" @click="isMdShow = false" >取消</a>
+      </div>
+    </modal>
   <nav-footer></nav-footer>
   </div> 
 </template>
@@ -147,8 +154,9 @@ export default {
        addressList:[],
        filterCount:0,
        limit: 3,
-       expendText:'more',
-       selectedIndex:0
+       selectedIndex:0,
+       isMdShow:false,
+       DelAddressId:''
     }
   },
   components:{
@@ -164,16 +172,9 @@ export default {
       axios.get("/users/addressList", this.headerConfig).then((response)=>{
         let res = response.data;
         this.addressList = res.result;
-            console.log(this.addressList)
         for (let a of res.result ){
-            console.log('selected')
-            console.log(a)
           if (a.isDefault){
             this.selectedIndex =  this.addressList.indexOf(a);
-            console.log('selected')
-            console.log(this.selectedIndex)
-            console.log(this.addressList.indexOf(a))
-            console.log(this.addressList)
           }
         }
       });
@@ -181,10 +182,8 @@ export default {
     expand(){
       if(this.filterCount < this.addressList.length){
          this.filterCount = this.addressList.length;
-         this.expendText = 'less';
       }else{
         this.filterCount = 3;
-         this.expendText = 'more';
       }
     },
     setDetaultAddress(addressId){
@@ -193,11 +192,35 @@ export default {
        axios.post("/users/setDefaultAddress", params,this.headerConfig).then((response)=>{
           this.init();
        });
+    },
+    closeModal(){
+      this.isMdShow = false;
+    },
+    alertDel(addressId){
+      this.isMdShow = true;
+      this.DelAddressId = addressId;
+    },
+    delAddress(){
+      this.closeModal();
+      var params = new URLSearchParams();
+      params.append('addressId', this.DelAddressId);
+      axios.post("/users/delAddress", params,this.headerConfig).then((response)=>{
+          this.init();
+      }); 
     }
   },
   computed:{
     addressFilter(){
        return this.addressList.slice(0,this.filterCount);
+    },
+    expendText(){
+      if ( this.filterCount == this.addressList.length){
+        return '';
+      }else if(this.filterCount < this.addressList.length){
+        return 'more';
+      }else{
+        return 'less'; 
+      }
     }
   }
 }
