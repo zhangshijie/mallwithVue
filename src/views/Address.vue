@@ -60,7 +60,7 @@
           <div class="addr-list-wrap">
             <div class="addr-list">
               <ul>
-                <li v-for=" (item,index) in  addressFilter " v-bind:class="{'check': selectedIndex == index}" @click="selectedIndex = index">
+                <li v-for=" (item,index) in  addressFilter " v-bind:class="{'check': selectedIndex == index}" @click="selectedIndex = index; selectedAddressId = item.addressId">
                   <dl>
                     <dt> {{ item.userName }} </dt>
                     <dd class="address">{{ item.streetName }} </dd>
@@ -119,7 +119,7 @@
             </div>
           </div>
           <div class="next-btn-wrap">
-            <a class="btn btn--m btn--red">Next</a>
+            <router-link class="btn btn--m btn--red" :to="{ path: 'orderConfirm', query:{'addressId': selectedAddressId }}">Next</router-link>
           </div>
         </div>
       </div>
@@ -156,7 +156,8 @@ export default {
        limit: 3,
        selectedIndex:0,
        isMdShow:false,
-       DelAddressId:''
+       DelAddressId:'',
+       selectedAddressId:''
     }
   },
   components:{
