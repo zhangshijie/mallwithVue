@@ -110,7 +110,7 @@
               </li>
               <li class="order-total-price">
                 <span>Order total:</span>
-                <span>{{ total |  currency('$') }}</span>
+                <span>{{ orderTotal |  currency('$') }}</span>
               </li>
             </ul>
           </div>
@@ -121,7 +121,7 @@
             <button class="btn btn--m">Previous</button>
           </div>
           <div class="next-btn-wrap">
-            <button class="btn btn--m btn--red">Proceed to payment</button>
+            <button class="btn btn--m btn--red" @click="pay">Proceed to payment</button>
           </div>
         </div>
       </div>
@@ -162,10 +162,21 @@ export default {
           let res = response.data;
           this.cartList = res.result;
         });
+      },
+      pay(){
+         var params = new URLSearchParams();
+          params.append('orderTotal', this.orderTotal);
+          params.append('addressId', this.$route.query.addressId);
+          axios.post("/users/pay",params,this.headerConfig).then((response)=> {
+            let res = response.data;
+            if(res.status == 0){
+              console.log('order created suc')
+            }
+          });
       }
     },
     computed:{
-      total(){
+      orderTotal(){
         return this.subtotal + this.Tax + this.Shipping - this.Discount ;
       },
       subtotal(){
